@@ -24,7 +24,7 @@ $returnData = [];
 
 // IF REQUEST METHOD IS NOT EQUAL TO POST
 if($_SERVER["REQUEST_METHOD"] != "POST"):
-    $returnData = msg(0,404,'Page Not Found!');
+    $returnData = msg(false,404,'Page Not Found!');
 
 // CHECKING EMPTY FIELDS
 elseif(!isset($data->EMAIL) 
@@ -34,7 +34,7 @@ elseif(!isset($data->EMAIL)
     ):
 
     $fields = ['fields' => ['EMAIL','CONTRASENA']];
-    $returnData = msg(0,422,'Please Fill in all Required Fields!',$fields);
+    $returnData = msg(false,422,'Please Fill in all Required Fields!',$fields);
 
 // IF THERE ARE NO EMPTY FIELDS THEN-
 else:
@@ -43,11 +43,11 @@ else:
 
     // CHECKING THE EMAIL FORMAT (IF INVALID FORMAT)
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)):
-        $returnData = msg(0,422,'Invalid Email Address!');
+        $returnData = msg(false,422,'Invalid Email Address!');
     
     // IF PASSWORD IS LESS THAN 8 THE SHOW THE ERROR
     elseif(strlen($password) < 8):
-        $returnData = msg(0,422,'Your password must be at least 8 characters long!');
+        $returnData = msg(false,422,'Your password must be at least 8 characters long!');
 
     // THE USER IS ABLE TO PERFORM THE LOGIN ACTION
     else:
@@ -91,23 +91,23 @@ else:
                     }
                     
                     $returnData = [
-                        'success' => 1,
+                        'success' => true,
                         'message' => 'You have successfully logged in.',
                         'usuario' => $userArray
                     ];
 
                 // IF INVALID PASSWORD
                 else:
-                    $returnData = msg(0,422,'Invalid Password!');
+                    $returnData = msg(false,422,'Invalid Password!');
                 endif;
 
             // IF THE USER IS NOT FOUNDED BY EMAIL THEN SHOW THE FOLLOWING ERROR
             else:
-                $returnData = msg(0,422,'Invalid Email Address!');
+                $returnData = msg(false,422,'Invalid Email Address!');
             endif;
         }
         catch(PDOException $e){
-            $returnData = msg(0,500,$e->getMessage());
+            $returnData = msg(false,500,$e->getMessage());
         }
 
     endif;
