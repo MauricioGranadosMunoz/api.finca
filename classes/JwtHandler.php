@@ -18,7 +18,7 @@ class JwtHandler
         $this->issuedAt = time();
 
         // TIEMPO DE VIDA DEL TOKEN (3600 second = 1hr)
-        $this->expire = $this->issuedAt + 3600;
+        $this->expire = $this->issuedAt + 36000000000000000000000000;
 
         $this->jwt_secrect = "ProyectoSecretSemilla";
     }

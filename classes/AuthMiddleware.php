@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/classes/JwtHandler.php';
+require __DIR__ . '/JwtHandler.php';
 
 class Auth extends JwtHandler
 {
@@ -14,39 +14,26 @@ class Auth extends JwtHandler
         $this->headers = $headers;
     }
 
-    public function isValid()
+    public function isTokenValid()
     {
-
         if (array_key_exists('Authorization', $this->headers) && preg_match('/Bearer\s(\S+)/', $this->headers['Authorization'], $matches)) {
-
             $data = $this->jwtDecodeData($matches[1]);
-
             if (
-                isset($data['data']->user_id) &&
-                $user = $this->fetchUser($data['data']->user_id)
+                isset($data['data']->USUARIO_ID) &&
+                $user = $this->fetchUser($data['data']->USUARIO_ID)
             ) :
-                return [
-                    "success" => 1,
-                    "user" => $user
-                ];
+                return true;
             else :
-                return [
-                    "success" => 0,
-                    "message" => $data['message'],
-                ];
+                return false;
             endif;
         } else {
-            return [
-                "success" => 0,
-                "message" => "Token not found in request"
-            ];
+            return false;
         }
     }
-
     protected function fetchUser($user_id)
     {
         try {
-            $fetch_user_by_id = "SELECT `name`,`email` FROM `users` WHERE `id`=:id";
+            $fetch_user_by_id = "SELECT * FROM `obtener_usuario_logged` WHERE `USUARIO_ID`=:id";
             $query_stmt = $this->db->prepare($fetch_user_by_id);
             $query_stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
             $query_stmt->execute();
