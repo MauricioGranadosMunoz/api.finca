@@ -5,6 +5,8 @@ import { obtenerCajuelaSemana } from '../../store/slices/Cajuela';
 import { obtenerTrabajadoresActuales } from '../../store/slices/Usuario/usuarioThunk';
 import { CheckingAuth } from '../auth/CheckingAuth';
 import { DinamicCajuelasForm } from '../components/DinamicCajuelasForm';
+import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { MainPDF } from '../../pdf/MainPDF';
 
 export const AddCajuelas = () => {
   const dispatch = useDispatch();
@@ -28,6 +30,11 @@ export const AddCajuelas = () => {
         <DinamicCajuelasForm cajuelaSemana={ cajuelaSemana }/>
       }
       <br />
+      <PDFDownloadLink document={<MainPDF />} fileName="somename.pdf">
+      {({ blob, url, loading, error }) =>
+        loading ? 'Loading document...' : 'Download now!'
+      }
+    </PDFDownloadLink>
     </div>
   )
 }

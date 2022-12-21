@@ -1,4 +1,3 @@
-;
 import { usuarioApi } from "../../../api/fincaAPI";
 import { setLoadedToken, setTrabajadores, setUsuarioLogged } from "./usuarioSlice";
 
