@@ -6,20 +6,16 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 1000');
     require '../../classes/Database.php';
     require '../../classes/AuthMiddleware.php';
-    require '../../classes/Cajuela.php';
+    require '../../classes/Usuario.php';
 
+    $returnData = [];
     $allHeaders = getallheaders();
+    $data = json_decode(file_get_contents("php://input"));
     $database = new Database();
     $db = $database->dbConnection();
-    $data = json_decode(file_get_contents("php://input"));
-
-    $cajuela = new Cajuela($db);
-
     $auth = new Auth($db, $allHeaders );
+    $usuarios = new Usuario($db);
     
-    if($auth->isTokenValid()){
-        echo json_encode($cajuela->obtenerCajuelasSemana());
-    } else {
-        $returnData = $database->endPointResponseMsg(1, false, 'TOKEN DE USUARIO NO VALIDO');
-    }
+    $returnData = $usuarios->obtenerRebajaSemana($data->SEMANA_REBAJA);
+    echo json_encode($returnData);
 ?>

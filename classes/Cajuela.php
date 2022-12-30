@@ -102,6 +102,43 @@
                 return null;
             }
         }
+
+        public function UpdateCajuelaPrecio($NUEVO_PRECIO, $ADMINISTRADOR_ID ){
+            try {
+                $SqlUpdatePrecioCajuela = "UPDATE PRECIO_CAJUELA SET PRECIO_ACTUAL = :NUEVO_PRECIO WHERE PRECIO_CAJUELA_ID = 1";
+                $STMT_QUERY = $this->conn->prepare($SqlUpdatePrecioCajuela);
+                $STMT_QUERY->bindValue(':NUEVO_PRECIO', $NUEVO_PRECIO, PDO::PARAM_INT);
+
+                $SqlUpdatePrecioCajuelaRegistro = "INSERT INTO UPDATE_PRECIO_CAJUELA ( NUEVO_PRECIO, ADMINISTRADOR_ID ) VALUES (:NUEVO_PRECIO_REGISTRO, :ADMINISTRADOR_ID_REGISTRO)";
+                $STMT_QUERY_REGISTRO = $this->conn->prepare($SqlUpdatePrecioCajuelaRegistro);
+                $STMT_QUERY_REGISTRO->bindValue(':NUEVO_PRECIO_REGISTRO', $NUEVO_PRECIO, PDO::PARAM_INT);
+                $STMT_QUERY_REGISTRO->bindValue(':ADMINISTRADOR_ID_REGISTRO', $ADMINISTRADOR_ID, PDO::PARAM_INT);
+                    
+                    if ($STMT_QUERY->execute() && $STMT_QUERY_REGISTRO->execute()) :
+                        return true;
+                    else :
+                        return false;
+                endif;
+            } catch (PDOException $e) {
+                    return false;
+            }
+        }
+        public function obtenerPrecioActualCajuela( ){
+            try {
+                $sqlObtenerCajuelaSemana = "SELECT * FROM PRECIO_CAJUELA";
+                $resultTest = $this->conn->query($sqlObtenerCajuelaSemana);
+                $query_stmtS = $this->conn->prepare($sqlObtenerCajuelaSemana);
+                $query_stmtS->execute();
+                $row = $query_stmtS->fetch(PDO::FETCH_ASSOC);
+
+                if ( $row ) {
+                    return $row;
+                } else {
+                    return false;
+                }
+            } catch (PDOException $e) {
+                return false;
+            }
+        }
     }
 ?>
-
