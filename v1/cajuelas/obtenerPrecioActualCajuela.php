@@ -8,18 +8,12 @@ header('Access-Control-Max-Age: 1000');
     require '../../classes/AuthMiddleware.php';
     require '../../classes/Cajuela.php';
 
-    $allHeaders = getallheaders();
+    $returnData = [];
     $database = new Database();
     $db = $database->dbConnection();
-    $data = json_decode(file_get_contents("php://input"));
 
     $cajuela = new Cajuela($db);
+    $returnData = $cajuela->obtenerPrecioActualCajuela();
 
-    $auth = new Auth($db, $allHeaders );
-    
-    if($auth->isTokenValid()){
-        echo json_encode($cajuela->obtenerCajuelasSemana());
-    } else {
-        $returnData = $database->endPointResponseMsg(1, false, 'TOKEN DE USUARIO NO VALIDO');
-    }
+    echo json_encode($returnData);
 ?>

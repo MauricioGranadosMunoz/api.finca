@@ -6,18 +6,24 @@
     header('Access-Control-Max-Age: 1000');
     require '../../classes/Database.php';
     require '../../classes/AuthMiddleware.php';
-    require '../../classes/Usuario.php';
+    require '../../classes/Cajuela.php';
 
     $returnData = [];
     $allHeaders = getallheaders();
-    $data = json_decode(file_get_contents("php://input"));
     $database = new Database();
     $db = $database->dbConnection();
+    $data = json_decode(file_get_contents("php://input"));
+
+    $cajuela = new Cajuela($db);
+
     $auth = new Auth($db, $allHeaders );
-    $usuarios = new Usuario($db);
     
     if($auth->isTokenValid()){
-        $returnData = $usuarios->obtenerTrabajadoresActuales();
+        if($cajuela->UpdateCajuelaPrecio($data->NUEVO_PRECIO, $data->ADMINISTRADOR_ID)){
+            $returnData = $database->endPointResponseMsg(1, true, 'CAJUELAS AGREGADAS CON EXITO');
+        } else {
+            $returnData = $database->endPointResponseMsg(1, false, 'CAJUELAS NO AGREGADAS');
+        }
     } else {
         $returnData = $database->endPointResponseMsg(1, false, 'TOKEN DE USUARIO NO VALIDO');
     }
