@@ -1,11 +1,11 @@
 <?php
 class Database {
 
-    private $db_host = 'localhost';
+    private $db_host = '52.152.106.48';
     private $db_name = 'finca';
-    private $db_username = 'root';
-    private $db_password = '';
-    
+    private $db_username = 'MauricioGrM';
+    private $db_password = '99^Xy7!n1@7%';
+
     
     public function dbConnection(){
         
